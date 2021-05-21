@@ -37,13 +37,13 @@
 if ! ps aux | grep -q '[m]pg123'
 then
 #ptt via rigctld on
-echo 'T1' | nc --send-only -t 127.0.0.1 4532
+echo 'T1' | ncat --send-only -t 127.0.0.1 4532
 #select audio card (if more than one)
 #export AUDIODEV=hw:1,0
 #play F-key message
 mpg123 ~/voice-keyer/$1.mp3
 #ptt via rigctld off
-echo 'T0' | nc --send-only -t 127.0.0.1 4532
+echo 'T0' | ncat --send-only -t 127.0.0.1 4532
 else
 #halt playing message (if pressed while playing)
 killall play
