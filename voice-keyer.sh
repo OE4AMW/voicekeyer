@@ -46,5 +46,5 @@ mpg123 ~/voice-keyer/$1.mp3
 echo 'T0' | ncat --send-only -t 127.0.0.1 4532
 else
 #halt playing message (if pressed while playing)
-killall play
+pkill -f "mpg123.*voice-keyer"
 fi
