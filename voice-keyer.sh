@@ -34,7 +34,7 @@
 # At "TRX control"/"Radio xxx serial parameters set handshake none
 # and at least your YYY (DTR or RTS) to "Unset"
 
-if ! ps aux | grep -q '[m]pg123'
+if ! pgrep -f "mpg123.*voice-keyer" > /dev/null
 then
 #ptt via rigctld on
 echo 'T1' | ncat --send-only -t 127.0.0.1 4532
