@@ -5,7 +5,6 @@
 
 # FT-857 (and maybe other models) need to be switched to mode "DIG" to enable audio from rear connector
 SWITCHTODIG=1
-
 # Based on: https://www.cqrlog.com/node/879
 # Credits:
 #   - OH1KH
@@ -63,8 +62,11 @@ then
  fi
  #ptt via rigctld on
  echo 'T1' | ncat --send-only -t 127.0.0.1 4532
- #select audio card (if more than one)
- #export AUDIODEV=hw:1,0
+
+ # Use mechanisms of the used backend to select the used audio-card.
+ #  Pulseaudio: use the tools of your desktop
+ #  Others (e.g. alsa): add -o <type> -a <device>  (see 'man mpg321')
+
  mpg123 ~/voice-keyer/$1.mp3
  #ptt via rigctld off
  echo 'T0' | ncat --send-only -t 127.0.0.1 4532
