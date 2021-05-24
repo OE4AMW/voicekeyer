@@ -8,3 +8,14 @@ Requires:
 - rigctld (hamblib)
 - ncat
 - mpg321
+
+For debian-based distributions, use:
+
+    sudo apt-get install libhamlib-utils mpg321 ncat
+
+## Hints
+
+To start rigctld as non-root user, add user to the group owning the serial-interfaces or USB-Serial-adapters:
+
+    sudo usermod -a -G tty $USER
+    sudo usermod -a -G dialout $USER
