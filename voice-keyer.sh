@@ -1,7 +1,10 @@
 #!/bin/bash
 #
 # 2E1HNK Linux Digital Voice Keyer
-# 
+#
+
+# FT-857 (and maybe other models) need to be switched to mode "DIG" to enable audio from rear connector
+SWITCHTODIG=1
 
 # Based on: https://www.cqrlog.com/node/879
 # Credits:
@@ -36,15 +39,32 @@
 
 if ! pgrep -f "mpg123.*voice-keyer" > /dev/null
 then
-#ptt via rigctld on
-echo 'T1' | ncat --send-only -t 127.0.0.1 4532
-#select audio card (if more than one)
-#export AUDIODEV=hw:1,0
-#play F-key message
-mpg123 ~/voice-keyer/$1.mp3
-#ptt via rigctld off
-echo 'T0' | ncat --send-only -t 127.0.0.1 4532
+ if [ x"$SWITCHTODIG" = "x1" ]
+ then
+  echo "SWITCHING TO MODE DIGITAL. MAKE SURE TO CONFIGURE CORRECT MODE ON TRX IN Menu 038!"
+  # TODO: get currently selected Mode
+  MODE=`echo 'm' | ncat  --send-only   -t 127.0.0.1 4532`
+  echo "Previous mode: $MODE"
+  # switch to DIG
+  echo 'M PKTUSB 0' | ncat  --send-only   -t 127.0.0.1 4532
+ else
+  echo "Not switching mode ..."
+ fi
+ #ptt via rigctld on
+ echo 'T1' | ncat --send-only -t 127.0.0.1 4532
+ #select audio card (if more than one)
+ #export AUDIODEV=hw:1,0
+ #play F-key message
+ mpg123 ~/voice-keyer/$1.mp3
+ #ptt via rigctld off
+ echo 'T0' | ncat --send-only -t 127.0.0.1 4532
+ if [ x"$SWITCHTODIG" = "x1" ]
+ then
+  echo "M $MODE" | ncat  --send-only   -t 127.0.0.1 4532
+ else
+  echo "Not switching mode ..."
+ fi
 else
-#halt playing message (if pressed while playing)
-pkill -f "mpg123.*voice-keyer"
+ #halt playing message (if pressed while playing)
+ pkill -f "mpg123.*voice-keyer"
 fi
