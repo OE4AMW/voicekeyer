@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 2E1HNK Linux Digital Voice Keyer
+# OE4AMW, based on 2E1HNK Linux Digital Voice Keyer
 #
 
 # FT-857 (and maybe other models) need to be switched to mode "DIG" to enable audio from rear connector
@@ -19,14 +19,14 @@ then
  echo "- hamlib's rigctld - start e.g.: with 'rigctld -m 122 -r /dev/ttyUSB0  --set-conf=serial_speed=9600  -vvv'"
  echo "- ncat"
  echo "- mpg123"
+ echo ""
+ echo "Optionally: sox to use 'rec' for recording. E.g.: Use 'rec ~/voice-keyer/F1.mp3' to record F1 message. End recording with Ctrl-C"
  exit 1
 fi
 
 # install sox with all soundformats support
 # Use "rec ~/voice-keyer/F1.mp3" to record F1 message. End recording with Ctrl-C.
 # same with F2.mp3 Etc....
-# you may use also mpg123 or what ever terminal mode player you wish
-
 # Suggested Contents:
 #   F1          QRZ 2E1HNK/P
 #   F2          CQ CQ CQ Contest this is 2E1HNK/P 2E1HNK/P calling CQ Contest and standing by
@@ -65,7 +65,6 @@ then
  echo 'T1' | ncat --send-only -t 127.0.0.1 4532
  #select audio card (if more than one)
  #export AUDIODEV=hw:1,0
- #play F-key message
  mpg123 ~/voice-keyer/$1.mp3
  #ptt via rigctld off
  echo 'T0' | ncat --send-only -t 127.0.0.1 4532
