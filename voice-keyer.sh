@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# OE4AMW, based on 2E1HNK Linux Digital Voice Keyer
-#
-
-# FT-857 (and maybe other models) need to be switched to mode "DIG" to enable audio from rear connector
-SWITCHTODIG=1
-# Based on: https://www.cqrlog.com/node/879
+# OE4AMW, based on 2E1HNK 'Linux Digital Voice Keyer', based on: https://www.cqrlog.com/node/879
 # Credits:
 #   - OH1KH
 #   - SQ5LTL
+
+
+# FT-857 (and maybe other models) need to be switched to mode "DIG" to enable audio from rear connector
+SWITCHTODIG=1
+
 
 if [ $# -eq 0 ]
 then
@@ -17,7 +17,7 @@ then
  echo "Requires:"
  echo "- hamlib's rigctld - start e.g.: with 'rigctld -m 122 -r /dev/ttyUSB0  --set-conf=serial_speed=9600  -vvv'"
  echo "- ncat"
- echo "- mpg123"
+ echo "- mpg321"
  echo ""
  echo "Optionally: sox to use 'rec' for recording. E.g.: Use 'rec ~/voice-keyer/F1.mp3' to record F1 message. End recording with Ctrl-C"
  exit 1
@@ -78,6 +78,7 @@ then
  fi
 else
  #halt playing message (if pressed while playing)
+ echo "Stopping previous playback ..."
  pkill -f "mpg123.*voice-keyer"
 fi
 
