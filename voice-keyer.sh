@@ -11,6 +11,17 @@ SWITCHTODIG=1
 #   - OH1KH
 #   - SQ5LTL
 
+if [ $# -eq 0 ]
+then
+ echo "usage: ./voice-keyer.sh <Recording-ID> (filename without extension '.mp3')"
+ echo ""
+ echo "Requires:"
+ echo "- hamlib's rigctld - start e.g.: with 'rigctld -m 122 -r /dev/ttyUSB0  --set-conf=serial_speed=9600  -vvv'"
+ echo "- ncat"
+ echo "- mpg123"
+ exit 1
+fi
+
 # install sox with all soundformats support
 # Use "rec ~/voice-keyer/F1.mp3" to record F1 message. End recording with Ctrl-C.
 # same with F2.mp3 Etc....
@@ -68,3 +79,5 @@ else
  #halt playing message (if pressed while playing)
  pkill -f "mpg123.*voice-keyer"
 fi
+
+exit 0
