@@ -52,16 +52,42 @@ then
  if [ x"$SWITCHTODIG" = "x1" ]
  then
   echo "SWITCHING TO MODE DIGITAL. MAKE SURE TO CONFIGURE CORRECT MODE ON TRX IN Menu 038!"
-  # TODO: get currently selected Mode
-  MODE=`echo 'm' | ncat  --send-only   -t 127.0.0.1 4532`
-  echo "Previous mode: $MODE"
+
+  while read line
+  do
+   if [[ "$line" ==  RPRT* ]]; then
+    echo "Received line: $line"
+    break
+   else
+    if [[ "$line" == Mode* ]]; then
+     MODE=`echo $line | cut -d' ' -f2`
+     continue
+    else if [[ "$line" == Passband* ]]; then
+     PASSBAND=`echo $line | cut -d' ' -f2`
+     continue
+    fi
+   fi
+   echo "received: $line"
+  fi
+  done < <( (echo "+\get_mode" ) | nc -w 15 -t 127.0.0.1 4532 )
+
+  echo "Previous mode: $MODE $PASSBAND"
   # switch to DIG
-  echo 'M PKTUSB 0' | ncat  --send-only   -t 127.0.0.1 4532
+  echo "Switching mode before PTT"
+  echo 'M PKTUSB 0' | nc -N -t 127.0.0.1 4532
  else
   echo "Not switching mode ..."
  fi
- #ptt via rigctld on
- echo 'T1' | ncat --send-only -t 127.0.0.1 4532
+
+
+ # PTT via rigctld on. Note to self: Combining both commands in one invocation of nc ( echo -e "M PKTUSB 0\nT1" | nc -N -t 127.0.0.1 4532 ) did not work reliably, sometime radio returns -9
+ echo 'T1' | nc -N -t 127.0.0.1 4532
+ if [ $? -ne 0 ]
+ then
+  echo ""
+  echo "rigctld NOT RUNNING!!!"
+  echo ""
+ fi
 
  # Use mechanisms of the used backend to select the used audio-card.
  #  Pulseaudio: use the tools of your desktop
@@ -69,10 +95,12 @@ then
 
  mpg123 ~/voice-keyer/$1.mp3
  #ptt via rigctld off
- echo 'T0' | ncat --send-only -t 127.0.0.1 4532
+ echo 'T0' | nc -N -t 127.0.0.1 4532
  if [ x"$SWITCHTODIG" = "x1" ]
  then
-  echo "M $MODE" | ncat  --send-only   -t 127.0.0.1 4532
+  echo "Switch back to $MODE $PASSBAND"
+  echo -e "M $MODE $PASSBAND" | nc -N -t 127.0.0.1 4532
+
  else
   echo "Not switching mode ..."
  fi
