@@ -56,7 +56,7 @@ then
   while read line
   do
    if [[ "$line" ==  RPRT* ]]; then
-    echo "Received line: $line"
+    echo "Hamlib returnvalue: $line"
     break
    else
     if [[ "$line" == Mode* ]]; then
@@ -67,9 +67,9 @@ then
      continue
     fi
    fi
-   echo "received: $line"
+   #echo "received: $line"
   fi
-  done < <( (echo "+\get_mode" ) | nc -w 15 -t 127.0.0.1 4532 )
+  done < <( (echo "+\get_mode" ) | nc -w 1 -t 127.0.0.1 4532 )
 
   echo "Previous mode: $MODE $PASSBAND"
   # switch to DIG
