@@ -2,7 +2,7 @@
 Voice keyer using Linux command line utilities ans rigctld (hamlib).
 
 Based on https://gist.github.com/m5mat/06036af440d2e8ccecf43e553b8ce7b6 (by 2E1HNK, OH1KH, SQ5LTL).
-Extended for FT-857D which needs to be tuned to "DIG" to use a sound-card interface.
+Extended for FT-857D which needs to be tuned to "DIG" to use a sound-card interface on the rear data-connector.
 
 Requires:
 - rigctld (hamblib)
@@ -34,4 +34,5 @@ To start rigctld as non-root user, add user to the group owning the serial-inter
     sudo usermod -a -G dialout $USER
 
 # Config-Options
-Set SWITCHTODIG to a value != 1 If you don not want to switch to mode DIG (for FT-857D).
+Set SWITCHTODIG to a value != 1 If you do not want to switch to mode DIG (for FT-857D).
+When using SWITCHTODIG, make sure that Menu 038 is configured to the intended mode (USER-U for USB, USER-L for LSB).
